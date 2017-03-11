@@ -48,6 +48,7 @@ class BaseAlert(object, metaclass=BaseAlertMetaclass):
 
     alert = None
     interval = 0
+    fire_once = False
     name = None
 
     def __init__(self, alert):
@@ -288,6 +289,8 @@ class AlertPlugins(metaclass=HookMetaclass):
         for instance in self.mods:
             try:
                 if instance.name in results:
+                    if instance.fire_once:
+                        continue
                     if results.get(instance.name).get(
                         'lastrun'
                     ) > time.time() - (instance.interval * 60):
